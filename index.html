@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>美食档案馆</title>
+    <link rel="stylesheet" href="./styles.css?v=20260414b" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <h1>美食档案馆</h1>
+        <p class="hero__copy">先建立食物档案，再按分类方式整理和检索。</p>
+      </section>
+
+      <section class="layout">
+        <aside class="panel panel--form">
+          <div class="panel__title-row">
+            <div>
+              <h2>上传食物档案</h2>
+            </div>
+            <span id="entry-count" class="panel__badge">0 条</span>
+          </div>
+
+          <form id="archive-form" class="archive-form">
+            <label class="field">
+              <span>食物图片</span>
+              <input id="food-image" name="image" type="file" accept="image/*" required />
+            </label>
+
+            <div id="image-preview" class="image-preview image-preview--empty">
+              <span>上传后会在这里预览</span>
+            </div>
+
+            <section class="tag-builder">
+              <div class="tag-builder__header">
+                <div>
+                  <h3>分类标签</h3>
+                  <p class="field__hint">
+                    分类方式可直接输入；具体分类可逐级添加，也可用逗号一次补完整条路径。
+                  </p>
+                </div>
+              </div>
+
+              <label class="field">
+                <span>分类方式</span>
+                <input
+                  id="tag-dimension"
+                  type="text"
+                  maxlength="20"
+                  placeholder="例如：食材种类、烹饪方式、食物口感"
+                  list="recent-dimensions"
+                />
+                <datalist id="recent-dimensions"></datalist>
+              </label>
+
+              <div class="path-builder">
+                <div class="path-builder__topline">
+                  <span class="path-builder__entry-label">当前分类路径</span>
+                  <button id="add-tag" type="button" class="button button--primary">加入当前分类</button>
+                </div>
+
+                <div id="path-preview" class="path-preview">
+                  <span class="selected-tags__empty">还没有添加层级。</span>
+                </div>
+
+                <div class="path-builder__entry">
+                  <span class="path-builder__entry-label">新增一级分类</span>
+                  <div class="path-builder__entry-controls">
+                    <select id="tag-segment-select">
+                      <option value="">先填写分类方式</option>
+                    </select>
+                    <input
+                      id="tag-segment"
+                      type="text"
+                      maxlength="120"
+                      placeholder="输入一级分类；也可用逗号一次填写完整路径，例如 动物,海鲜,鱼类,金枪鱼"
+                    />
+                  </div>
+                </div>
+
+                <div class="path-builder__buttons">
+                  <button id="add-segment" type="button" class="button button--ghost">添加层级</button>
+                  <button
+                    id="remove-last-segment"
+                    type="button"
+                    class="button button--ghost button--small"
+                  >
+                    删除末级
+                  </button>
+                  <button
+                    id="clear-path"
+                    type="button"
+                    class="button button--ghost button--small"
+                  >
+                    清空路径
+                  </button>
+                </div>
+              </div>
+
+              <div class="tag-examples">
+                <span class="tag-examples__label">最近 3 次分类</span>
+                <div id="recent-tags" class="tag-examples__list"></div>
+              </div>
+
+              <div class="tag-examples">
+                <span class="tag-examples__label">已收藏分类</span>
+                <div id="favorite-tags" class="tag-examples__list"></div>
+              </div>
+            </section>
+
+            <label class="field">
+              <span>备注</span>
+              <textarea
+                id="food-description"
+                name="description"
+                rows="3"
+                maxlength="200"
+                placeholder="例如：油脂丰厚，适合刺身，入口有明显鲜甜感。"
+              ></textarea>
+            </label>
+
+            <div class="form-actions">
+              <button type="submit" class="button button--primary">保存档案</button>
+              <button type="reset" id="reset-form" class="button button--ghost">清空表单</button>
+            </div>
+          </form>
+        </aside>
+
+        <section class="panel panel--browser">
+          <div class="panel__title-row">
+            <div>
+              <h2>分类索引与检索</h2>
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <div>
+              <p class="toolbar__label">当前筛选</p>
+              <div id="selected-tags" class="selected-tags"></div>
+            </div>
+            <div class="toolbar__actions">
+              <button id="run-query" type="button" class="button button--primary">查询档案</button>
+              <button id="clear-filters" type="button" class="button button--ghost">清空筛选</button>
+              <button id="reset-default-indexes" type="button" class="button button--danger">
+                重置默认索引
+              </button>
+            </div>
+          </div>
+
+          <div class="browser-stack">
+            <section class="browser-column">
+              <h3>分类索引</h3>
+              <div id="tag-tree" class="tag-tree"></div>
+            </section>
+
+            <section class="browser-column browser-column--results">
+              <div class="results-header">
+                <h3>档案结果</h3>
+                <span id="results-count" class="results-count">0 条</span>
+              </div>
+              <div id="results" class="results"></div>
+            </section>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script type="module" src="./src/main.js?v=20260414b"></script>
+  </body>
+</html>
