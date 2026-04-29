@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "上传食物档案",
+  "usingComponents": {
+    "archive-card": "/components/archive-card/archive-card"
+  }
+}

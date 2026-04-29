@@ -1,0 +1,56 @@
+.toolbar-selected {
+  margin-top: 10rpx;
+}
+
+.search-toolbar-card {
+  margin-bottom: 0;
+}
+
+.search-advanced-toggle-card {
+  padding-top: 14rpx;
+  padding-bottom: 14rpx;
+}
+
+.search-advanced-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16rpx;
+}
+
+.search-advanced-toggle__copy {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.search-index-maintenance {
+  margin-top: 12rpx;
+}
+
+.search-reset-button {
+  width: 100%;
+}
+
+.browser-section-title {
+  font-size: 28rpx;
+}
+
+.toolbar-actions button {
+  flex: 1 1 calc(50% - 5rpx);
+}
+
+.toolbar-actions .danger-button {
+  flex-basis: 100%;
+}
+
+@media (max-width: 375px) {
+  .browser-section-title {
+    font-size: 26rpx;
+  }
+
+  .toolbar-actions button {
+    flex-basis: 100%;
+  }
+}

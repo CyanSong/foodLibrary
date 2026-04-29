@@ -1,0 +1,73 @@
+<view
+  class="record-card {{preview ? 'record-card--preview' : ''}} {{showDelete && !preview ? 'record-card--selectable' : ''}} {{deleteArmed ? 'record-card--delete-armed' : ''}}"
+  bindtap="handleArmDelete"
+>
+  <view wx:if="{{showDelete && !preview && deleteArmed}}" class="record-card__floating-delete" catchtap="handleDelete">
+    <view class="record-card__delete-line record-card__delete-line--start"></view>
+    <view class="record-card__delete-line record-card__delete-line--end"></view>
+  </view>
+
+  <view class="record-card__media">
+    <image
+      class="record-card__image"
+      src="{{archive.imageSrc}}"
+      mode="aspectFit"
+      catchtap="handlePreview"
+    />
+  </view>
+
+  <view class="record-card__body">
+    <view wx:if="{{preview}}" class="record-card__header">
+      <text class="record-card__meta">预览效果</text>
+    </view>
+
+    <view class="record-card__content">
+      <view class="record-card__section">
+        <text class="record-card__section-label">备注</text>
+        <block wx:if="{{archive.description}}">
+          <text class="record-card__description">{{archive.description}}</text>
+        </block>
+        <block wx:else>
+          <text class="record-card__hint">{{preview ? '备注会同步显示在这里。' : '未填写备注。'}}</text>
+        </block>
+      </view>
+
+      <view class="record-card__section">
+        <text class="record-card__section-label">分类标签</text>
+        <block wx:if="{{archive.tags && archive.tags.length}}">
+          <view class="record-card__groups">
+            <view class="tag-group" wx:for="{{archive.tags}}" wx:key="id">
+              <view
+                class="tag-group__surface {{editableTags ? 'tag-group__surface--editable' : ''}} {{editableTags && selectedTagId === item.id ? 'tag-group__surface--selected' : ''}}"
+                data-id="{{item.id}}"
+                bindtap="handleToggleTagSelection"
+              >
+                <view
+                  wx:if="{{editableTags && selectedTagId === item.id}}"
+                  class="tag-group__corner-action"
+                  data-id="{{item.id}}"
+                  data-dimension="{{item.dimension}}"
+                  data-path="{{item.path}}"
+                  catchtap="handleEditTag"
+                >
+                  <view class="tag-group__edit-body"></view>
+                  <view class="tag-group__edit-tip"></view>
+                </view>
+
+                <view class="tag-group__head {{editableTags && selectedTagId === item.id ? 'tag-group__head--with-corner-action' : ''}}">
+                <view class="tag-group__line">
+                  <text class="tag-group__title">{{item.dimension}}</text>
+                  <text class="tag-group__path">{{item.displayPath}}</text>
+                </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </block>
+        <block wx:else>
+          <text class="record-card__hint">{{preview ? '已添加的分类会显示在这里。' : '暂无分类标签。'}}</text>
+        </block>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,25 @@
+<view class="tabbar-shell">
+  <view class="tabbar">
+    <view
+      wx:for="{{items}}"
+      wx:key="pagePath"
+      class="tabbar__item {{selected === item.pagePath ? 'is-active' : ''}}"
+      data-path="{{item.pagePath}}"
+      bindtap="handleSwitchTab"
+    >
+      <view class="tabbar__icon {{selected === item.pagePath ? 'is-active' : ''}}">
+        <block wx:if="{{item.icon === 'builder'}}">
+          <view class="tabbar__upload-tray"></view>
+          <view class="tabbar__upload-stem"></view>
+          <view class="tabbar__upload-head tabbar__upload-head--left"></view>
+          <view class="tabbar__upload-head tabbar__upload-head--right"></view>
+        </block>
+        <block wx:elif="{{item.icon === 'search'}}">
+          <view class="tabbar__search-ring"></view>
+          <view class="tabbar__search-handle"></view>
+        </block>
+      </view>
+      <text class="tabbar__label">{{item.text}}</text>
+    </view>
+  </view>
+</view>

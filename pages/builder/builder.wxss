@@ -1,0 +1,89 @@
+.builder-section-title {
+  font-size: 28rpx;
+}
+
+.button-row--tight button {
+  flex: 1 1 calc(50% - 5rpx);
+}
+
+.button-compact {
+  flex: 0 0 auto;
+  min-width: 0;
+  padding: 14rpx 18rpx;
+  font-size: 22rpx;
+}
+
+.preview-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-top: -2rpx;
+}
+
+.preview-ai-button,
+.preview-manual-button,
+.preview-save-button {
+  flex: 1 1 calc(33.333% - 7rpx);
+  min-width: 180rpx;
+}
+
+.ai-assist-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  margin-top: -2rpx;
+  padding: 14rpx 16rpx;
+  border: 1rpx solid rgba(209, 183, 153, 0.88);
+  border-radius: 18rpx;
+  background: rgba(255, 252, 246, 0.9);
+}
+
+.ai-assist-result {
+  display: block;
+  color: #7c3813;
+  font-size: 22rpx;
+  line-height: 1.55;
+}
+
+.manual-entry-highlight {
+  border-color: rgba(154, 77, 34, 0.96);
+  background: rgba(252, 233, 214, 0.98);
+  box-shadow: 0 0 0 2rpx rgba(154, 77, 34, 0.12);
+}
+
+.path-action-row button {
+  flex: 1 1 calc(50% - 5rpx);
+}
+
+.inline-empty {
+  padding: 18rpx 16rpx;
+}
+
+.form-actions {
+  margin-top: 4rpx;
+}
+
+@media (max-width: 375px) {
+  .builder-section-title {
+    font-size: 26rpx;
+  }
+
+  .preview-save-button {
+    width: 100%;
+    flex-basis: 100%;
+    min-width: 0;
+  }
+
+  .preview-ai-button,
+  .preview-manual-button {
+    width: 100%;
+    flex-basis: 100%;
+    min-width: 0;
+  }
+
+  .button-row--tight button,
+  .path-action-row button,
+  .form-actions button {
+    flex-basis: 100%;
+  }
+}

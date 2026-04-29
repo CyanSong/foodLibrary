@@ -1,0 +1,155 @@
+<view class="page-shell">
+  <view class="hero-card">
+    <text class="hero-title">美食档案馆</text>
+    <text class="hero-copy">
+      平时直接点击分类右侧的 √ 就能查看对应图片；只有需要多选时，再打开高级筛选批量组合条件。
+    </text>
+  </view>
+
+  <view class="panel-card">
+    <view class="panel-head">
+      <view class="panel-title-group">
+        <text class="panel-title">分类索引与检索</text>
+      </view>
+    </view>
+
+    <view class="browser-stack">
+      <view class="browser-column">
+        <view class="results-header">
+          <text class="panel-title browser-section-title">分类索引</text>
+        </view>
+
+        <view wx:if="{{treeRows.length}}" class="tree-list">
+          <view class="tree-node" wx:for="{{treeRows}}" wx:key="id" style="{{item.indentStyle}}">
+            <view class="tree-row">
+              <button
+                wx:if="{{item.hasChildren}}"
+                class="tree-item-button"
+                data-id="{{item.id}}"
+                bindtap="handleToggleExpand"
+              >
+                <text class="tree-toggle__icon {{item.iconClass}}">{{item.icon}}</text>
+                <view class="tree-item-button__text">
+                  <text class="tree-item-button__label">{{item.label}}</text>
+                  <text class="tree-toggle__path">{{item.subtitle}}</text>
+                </view>
+                <text class="tag-button__count">{{item.count}}</text>
+              </button>
+
+              <view wx:else class="tree-item-button tree-item-button--static">
+                <text class="tree-toggle__icon {{item.iconClass}}">{{item.icon}}</text>
+                <view class="tree-item-button__text">
+                  <text class="tree-item-button__label">{{item.label}}</text>
+                  <text class="tree-toggle__path">{{item.subtitle}}</text>
+                </view>
+                <text class="tag-button__count">{{item.count}}</text>
+              </view>
+
+              <view class="tree-row__actions">
+                <view
+                  class="index-action-button index-action-button--select {{item.selected ? 'is-selected' : ''}}"
+                  data-id="{{item.id}}"
+                  bindtap="handleToggleFilter"
+                >
+                  ✓
+                </view>
+                <view
+                  class="index-action-button index-action-button--favorite {{item.favorited ? 'is-selected' : ''}}"
+                  data-id="{{item.id}}"
+                  bindtap="handleToggleFavorite"
+                >
+                  {{item.favorited ? '★' : '☆'}}
+                </view>
+                <view
+                  class="index-action-button index-action-button--delete"
+                  data-id="{{item.id}}"
+                  bindtap="handleDeleteIndex"
+                >
+                  <view class="index-action-button__cross-line index-action-button__cross-line--start"></view>
+                  <view class="index-action-button__cross-line index-action-button__cross-line--end"></view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+        <view wx:else class="empty-card">还没有任何分类。</view>
+
+        <view class="search-index-maintenance">
+          <button class="danger-button search-reset-button" bindtap="handleResetDefaultIndexes">
+            重置默认索引
+          </button>
+        </view>
+      </view>
+
+      <view class="toolbar-card search-advanced-toggle-card">
+        <view class="search-advanced-toggle">
+          <view class="search-advanced-toggle__copy">
+            <text class="toolbar-label">高级筛选</text>
+            <text class="toolbar-copy">打开后可多选分类，再统一查询档案。</text>
+          </view>
+          <switch
+            checked="{{isAdvancedFilterOpen}}"
+            color="#9a4d22"
+            bindchange="handleAdvancedFilterChange"
+          />
+        </view>
+      </view>
+
+      <view wx:if="{{isAdvancedFilterOpen}}" class="toolbar-card search-toolbar-card">
+        <text class="toolbar-label">当前筛选</text>
+
+        <view wx:if="{{selectedFilters.length}}" class="selected-filter-list toolbar-selected">
+          <view class="selected-tag" wx:for="{{selectedFilters}}" wx:key="id">
+            <text>{{item.label}}</text>
+            <view
+              class="selected-tag__remove"
+              data-id="{{item.id}}"
+              bindtap="handleRemoveSelectedFilter"
+            >
+              <view class="selected-tag__remove-line selected-tag__remove-line--start"></view>
+              <view class="selected-tag__remove-line selected-tag__remove-line--end"></view>
+            </view>
+          </view>
+        </view>
+        <text wx:else class="toolbar-copy">还没有选择任何索引。</text>
+
+        <view class="button-row toolbar-actions">
+          <button
+            class="primary-button"
+            disabled="{{!selectedFilterIds.length}}"
+            bindtap="handleRunQuery"
+          >
+            查询档案
+          </button>
+          <button
+            class="ghost-button"
+            disabled="{{!(selectedFilterIds.length || appliedFilterIds.length)}}"
+            bindtap="handleClearFilters"
+          >
+            清空筛选
+          </button>
+        </view>
+      </view>
+
+      <view class="browser-column">
+        <view class="results-header">
+          <text class="panel-title browser-section-title">档案结果</text>
+          <text class="results-count">{{resultCount}} 条</text>
+        </view>
+
+        <view wx:if="{{results.length}}" class="result-list">
+          <archive-card
+            wx:for="{{results}}"
+            wx:key="id"
+            archive="{{item}}"
+            showDelete="{{true}}"
+            deleteArmed="{{selectedResultId === item.id}}"
+            bindarmdelete="handleArmArchiveDelete"
+            binddelete="handleDeleteArchive"
+          />
+        </view>
+        <view wx:else class="empty-card">{{emptyResultsText}}</view>
+      </view>
+    </view>
+  </view>
+</view>

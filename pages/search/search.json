@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "分类索引与检索",
+  "usingComponents": {
+    "archive-card": "/components/archive-card/archive-card"
+  }
+}

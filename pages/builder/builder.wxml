@@ -1,0 +1,216 @@
+<view class="page-shell">
+  <view class="hero-card">
+    <text class="hero-title">美食档案馆</text>
+    <text class="hero-copy">
+      先选择图片；你可以点 AI 识图自动补全“菜系”和“食材类型”，也可以手动选择已有分类或补充新的下一级分类。确认预览、分类标签和备注后，再保存档案。
+    </text>
+  </view>
+
+  <view class="panel-card">
+    <view class="panel-head">
+      <view class="panel-title-group">
+        <text class="panel-title">上传食物档案</text>
+      </view>
+      <text class="panel-badge">{{archiveCount}} 条</text>
+    </view>
+
+    <view class="form-stack">
+      <view class="field-block">
+        <text class="field-label">食物图片</text>
+        <view class="button-row button-row--tight">
+          <button class="primary-button" bindtap="handleChooseImage">
+            {{draftImagePath ? '重新选择图片' : '选择图片'}}
+          </button>
+          <button wx:if="{{draftImagePath}}" class="ghost-button" bindtap="handleClearImage">
+            清空图片
+          </button>
+        </view>
+      </view>
+
+      <view class="image-preview {{draftImagePath ? '' : 'image-preview--empty'}}">
+        <archive-card
+          wx:if="{{draftImagePath}}"
+          archive="{{previewArchive}}"
+          preview="{{true}}"
+          editableTags="{{true}}"
+          bindedittag="handleEditDraftTag"
+        />
+        <text wx:else>上传后会在这里预览</text>
+      </view>
+
+      <view wx:if="{{draftImagePath}}" class="preview-action-row">
+        <button
+          class="secondary-button preview-ai-button"
+          loading="{{isAiIndexing}}"
+          disabled="{{isAiIndexing || isSaving}}"
+          bindtap="handleAiIndexing"
+        >
+          AI 识图分类
+        </button>
+        <button
+          class="ghost-button preview-manual-button"
+          disabled="{{isSaving || isAiIndexing}}"
+          bindtap="handleManualClassify"
+        >
+          手动分类
+        </button>
+        <button
+          class="primary-button preview-save-button"
+          loading="{{isSaving}}"
+          disabled="{{isSaving || isAiIndexing}}"
+          bindtap="handleSaveArchive"
+        >
+          保存档案
+        </button>
+      </view>
+
+      <view wx:if="{{aiSummary}}" class="ai-assist-card">
+        <text class="ai-assist-result">{{aiSummary}}</text>
+      </view>
+
+      <view class="tag-builder">
+        <view class="path-builder-head">
+          <text class="panel-title builder-section-title">分类标签</text>
+        </view>
+
+        <view class="path-builder">
+          <view class="path-builder-topline">
+            <text class="path-builder-title">当前分类路径</text>
+            <button
+              class="primary-button button-compact"
+              disabled="{{!canAddCurrentTag}}"
+              bindtap="handleAddTag"
+            >
+              加入当前分类
+            </button>
+          </view>
+
+          <view class="path-preview">
+            <view wx:if="{{pendingTagSegments.length}}" class="path-preview__chips">
+              <view class="path-preview__item" wx:for="{{pendingTagSegments}}" wx:key="index">
+                <view class="path-chip">
+                  <text class="path-chip__label">{{item}}</text>
+                </view>
+                <text wx:if="{{index < pendingTagSegments.length - 1}}" class="path-chip__arrow">›</text>
+              </view>
+            </view>
+            <text wx:else class="path-copy">还没有添加层级。</text>
+          </view>
+
+          <view id="manual-classify-anchor" class="path-builder-entry">
+            <text class="meta-label">选择已有一级分类，或者输入下一级分类</text>
+            <view class="path-builder-entry-controls">
+              <picker
+                wx:if="{{availableNextSegments.length}}"
+                mode="selector"
+                range="{{availableNextSegments}}"
+                bindchange="handleSelectAvailableSegment"
+              >
+                <view class="picker-field {{manualEntryHighlightActive ? 'manual-entry-highlight' : ''}}">
+                  {{nextSegmentPickerLabel}}
+                </view>
+              </picker>
+              <view wx:else class="picker-field picker-field--disabled {{manualEntryHighlightActive ? 'manual-entry-highlight' : ''}}">
+                {{nextSegmentPickerLabel}}
+              </view>
+
+              <input
+                class="field-input field-input--compact path-builder-input {{manualEntryHighlightActive ? 'manual-entry-highlight' : ''}}"
+                placeholder="输入下一级分类，或用逗号一次补完整条链"
+                placeholder-style="color:#9a8d80;font-size:22rpx;"
+                value="{{pathInput}}"
+                bindinput="handlePathInput"
+                bindconfirm="handleAddSegment"
+                confirm-type="done"
+              />
+              <text class="field-hint path-entry-hint">例如：菜系,国际,东南亚,泰式</text>
+            </view>
+          </view>
+
+          <view class="button-row path-action-row">
+            <button class="ghost-button ghost-button--small" bindtap="handleAddSegment">
+              添加层级
+            </button>
+            <button
+              class="ghost-button ghost-button--small"
+              disabled="{{!canRemoveLastSegment}}"
+              bindtap="handleRemoveLastSegment"
+            >
+              删除末级
+            </button>
+            <button
+              class="ghost-button ghost-button--small"
+              disabled="{{!canClearPath}}"
+              bindtap="handleClearPath"
+            >
+              清空路径
+            </button>
+          </view>
+        </view>
+
+        <view class="meta-stack">
+          <text class="meta-label">最近 3 次分类</text>
+          <view wx:if="{{recentTags.length}}" class="chip-wrap recent-tag-list">
+            <view
+              class="chip-tap recent-tag-item"
+              wx:for="{{recentTags}}"
+              wx:key="id"
+              data-dimension="{{item.dimension}}"
+              data-path="{{item.path}}"
+              bindtap="handleLoadTagToBuilder"
+            >
+              <view class="chip recent-tag-chip {{currentBuilderId == item.id ? 'is-active' : ''}}">
+                <text class="chip__label">{{item.fullLabel}}</text>
+              </view>
+            </view>
+          </view>
+          <view wx:else class="empty-card inline-empty">暂无最近分类。</view>
+        </view>
+
+        <view class="meta-stack">
+          <text class="meta-label">已收藏分类</text>
+          <view wx:if="{{favoriteTags.length}}" class="chip-wrap">
+            <view
+              class="chip-tap"
+              wx:for="{{favoriteTags}}"
+              wx:key="id"
+              data-dimension="{{item.dimension}}"
+              data-path="{{item.path}}"
+              bindtap="handleLoadTagToBuilder"
+            >
+              <view class="chip {{currentBuilderId == item.id ? 'is-active' : ''}}">
+                <text class="chip__label">{{item.fullLabel}}</text>
+              </view>
+            </view>
+          </view>
+          <view wx:else class="empty-card inline-empty">暂无收藏分类。</view>
+        </view>
+      </view>
+
+      <view class="field-block">
+        <text class="field-label">备注</text>
+        <textarea
+          class="field-textarea"
+          placeholder="例如：油脂丰厚，适合刺身，入口有明显鲜甜感。"
+          value="{{description}}"
+          maxlength="300"
+          bindinput="handleDescriptionInput"
+        />
+      </view>
+
+      <view class="button-row form-actions">
+        <button
+          class="primary-button"
+          loading="{{isSaving}}"
+          disabled="{{isSaving}}"
+          bindtap="handleSaveArchive"
+        >
+          保存档案
+        </button>
+        <button class="ghost-button" disabled="{{isSaving}}" bindtap="handleResetForm">
+          清空表单
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

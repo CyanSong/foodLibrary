@@ -1,0 +1,29 @@
+{
+  "pages": ["pages/builder/builder", "pages/search/search"],
+  "window": {
+    "navigationBarTitleText": "美食档案馆",
+    "navigationBarBackgroundColor": "#f4e7d9",
+    "navigationBarTextStyle": "black",
+    "backgroundColor": "#f7f1ea",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "position": "bottom",
+    "color": "#7b685a",
+    "selectedColor": "#bb4f1d",
+    "backgroundColor": "#fff8f0",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/builder/builder",
+        "text": "上传档案"
+      },
+      {
+        "pagePath": "pages/search/search",
+        "text": "分类检索"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}
