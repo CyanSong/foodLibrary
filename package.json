@@ -1,8 +1,0 @@
-{
-  "name": "foodlibrary",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "dev": "python3 ./dev-server.py 4317"
-  }
-}

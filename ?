@@ -1,7 +1,0 @@
-styles.css:88:.selected-tags__empty,
-styles.css:129:.panel__title-row--stack {
-index.html:91:                  <span class="selected-tags__empty">还没有添加层级。</span>
-index.html:120:                  <span class="selected-tags__empty">还没有添加分类。</span>
-src/main.js:271:    pathPreviewElement.innerHTML = '<span class="selected-tags__empty">还没有添加层级。</span>';
-src/main.js:295:    recentTagsElement.innerHTML = '<span class="selected-tags__empty">暂无最近分类。</span>';
-src/main.js:331:    draftTagsElement.innerHTML = '<span class="selected-tags__empty">还没有添加分类。</span>';
